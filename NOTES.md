@@ -193,3 +193,8 @@ Two issues caught while setting up SDF; both matter, fixing before proceeding:
   label by code-regex (hack) + thinking-regex (silent), problem-level splits. Soundness safeguards:
   verify prompt hack-free for exit/always_equal; replicate Appendix-F knowledge check (model KNOWS
   hacks via OOC); confirm both classes; prompt_end control; same pre-emission anchor.
+
+## Box re-provision (2026-06-10)
+Stopped Vast instance lost its GPU on resume (reclaimed). Destroyed, reprovisioned fresh 4090
+(ssh4.vast.ai:20314, contract 40420315, 120GB disk). All models re-downloaded. No work lost
+(activations needed re-extraction for the prompt fix regardless; code+results in git).
