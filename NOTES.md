@@ -85,3 +85,34 @@ MET when pooled (0.88). Report both honestly. POST-emission 0.96 is a separate e
 not the headline. Net headline: pre-emission hack INTENT is decodable above chance and well
 (0.88 pooled), but markedly harder than post-hoc detection — exactly the gap that matters for
 catching hacks before they execute.
+
+## Controls (2026-06-10) — important, partly deflationary, more honest
+C4 null = 0.485±0.10 (floor OK; note ±0.10 means <0.6 is noise-indistinguishable).
+
+1. **Silent hacks are COHERENT, not gibberish.** b0.02 silent-hack thinking: median 109 words,
+   coherence 0.75, 0% <15 words. The model reasons through the algorithm legitimately, then
+   silently emits os._exit instead. So the probe is NOT just detecting broken thinking.
+
+2. **Intent EMERGES during reasoning — not a problem-difficulty confound.** silent-vs-nohack:
+   prompt_end (problem only, pre-generation) AUC=0.54 (chance) vs think_end (post-reasoning)=0.76.
+   The problem alone doesn't predict the silent hack; the decision develops as the model reasons.
+   => kills the "just reading hard-problem topic" confound.
+
+3. **BUT a text monitor nearly matches the probe.** TF-IDF on the (non-hack-mentioning) thinking
+   gets AUC 0.72 on silent hacks vs probe 0.76. Regex/keyword monitor recall only 0.07.
+   => The silent hack is "silent" only w.r.t. hack KEYWORDS; the reasoning still carries non-keyword
+   lexical tells of the developing decision. White-box probe adds little over a SEMANTIC text monitor.
+   REFRAMED HEADLINE: CoT *keyword* monitoring fails on silent hacks; the intent is not
+   representationally hidden — it's recoverable from activations (0.76) AND from CoT lexical content
+   (0.72). The monitoring failure is keyword-matching, not absence of signal.
+
+4. **Cross-checkpoint transfer preview (RQ2/E3): POOR.** probe trained on b0.0 verbalized hacks ->
+   b0.02 silent hacks AUC=0.436 (~chance/below). Tentative evidence the KL penalty RESTRUCTURES the
+   hack representation (their memorization hypothesis, H2'), NOT just suppresses verbalization (H2).
+   CAVEAT: could be trivial activation-geometry shift between two LoRA finetunes; E3 must add
+   within-checkpoint verbal->silent control + direction cosine before claiming restructuring.
+
+**LLM-judge baseline is now PIVOTAL** (the realistic semantic CoT monitor, zero-shot, not trained on
+this run's distribution like TF-IDF). If it MISSES coherent silent hacks while the probe catches them
+=> genuine white-box/OOCR win. If it catches them => "semantic monitors suffice, keyword monitors don't."
+Needs the take-home's OpenAI key.
