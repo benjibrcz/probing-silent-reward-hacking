@@ -42,3 +42,25 @@ Off-clock: GPU box setup + model downloads (infrastructure).
     tests whether that internal (OOCR-flavored) computation is linearly recoverable.
 - Writeup plan: cite OOCR in related work as the reason hidden intent exists; flag SDF as the
   more direct OOCR organism and a natural probe-transfer future-work (prompted→SDF).
+
+## OOCR framing decision (2026-06-10)
+- Lit review `lit_review_OOCR.md` (Opus). OOCR was missing from reviews A/B/C — now covered.
+- DECISION: prompted core now; SDF strict-OOCR as a stretch (generate+label SDF rollouts, test
+  probe transfer prompted->SDF). User-approved.
+- HONESTY: our checkpoints are PROMPTED (hacks in system prompt). So the hack *knowledge* is
+  in-context; only the *decision to hack + conceal* is non-verbalized => "non-verbalized in-context
+  intent", framed as "OOCR-style", NOT strict OOCR. Strict OOCR = SDF setting (stretch).
+- Closest prior work to cite + differentiate (do NOT claim the generic result as new):
+  - Wilhelm et al. 2026, "Monitoring Emergent Reward Hacking via Internal Activations" (2603.04069):
+    probes detect reward hacking pre-output — but on narrow SDF "School of Reward Hacks" organisms,
+    never framed as OOCR.
+  - Cox et al. 2026, "Decoding Answers Before Chain-of-Thought" (2603.01437): diff-of-means probes
+    recover the conclusion before the CoT; steering -> confabulated CoT.
+  - Goldowsky-Dill 2025 (probing for deception). Treutlein 2024 (Connecting the Dots) + Betley 2025
+    (Tell Me About Yourself) = OOCR/behavioral-self-awareness anchors; we are the activation-readout
+    complement to their behavioral verbalization tests. Wang 2025 (2507.08218): OOCR ~ constant
+    steering vector -> principled reason a linear probe should work.
+  - MacDiarmid 2025 (2511.18397) already attributes RH generalization to out-of-context
+    generalization, with NO probes -> we supply the missing internals evidence.
+- Honest novelty = the conjunction: AISI KL-penalty RL organisms (omission-style unfaithful CoT)
+  + explicitly casting "probe recovers intent the CoT omits" as decoding OOCR.
