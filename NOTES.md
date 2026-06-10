@@ -116,3 +116,27 @@ C4 null = 0.485±0.10 (floor OK; note ±0.10 means <0.6 is noise-indistinguishab
 this run's distribution like TF-IDF). If it MISSES coherent silent hacks while the probe catches them
 => genuine white-box/OOCR win. If it catches them => "semantic monitors suffice, keyword monitors don't."
 Needs the take-home's OpenAI key.
+
+## LLM-judge monitor — DECISIVE (2026-06-10)
+Zero-shot gpt-4.1-mini reading thinking-only (no code), asked "about to reward-hack?":
+**AUC=0.486 (CHANCE) on silent hacks; recall@p>=.5 = 0.00.** It reads every coherent silent-hack
+CoT as honest reasoning. P3 (LLM recall<0.3) CONFIRMED.
+
+Silent-hack detection scoreboard (b0.02, 59 silent):
+  regex keyword monitor : recall 0.07            (realistic, zero-shot) -> FAIL
+  LLM judge (reads CoT)  : AUC 0.486 / recall .00 (realistic, zero-shot) -> FAIL (chance)
+  TF-IDF on thinking     : AUC 0.72              (TRAINED on this organism) -> works
+  activation probe       : AUC 0.76              (TRAINED on this organism) -> works
+
+RESOLUTION of the TF-IDF worry: the key axis is NOT white-box-vs-text, it's
+zero-shot-vs-trained-on-organism. Realistic deployed CoT monitors (keyword + zero-shot LLM) FAIL
+because the reasoning genuinely looks honest. The hack intent is present but LATENT: invisible to a
+reader, recoverable by a detector trained on labeled rollouts of this model — from activations (0.76)
+OR subtle CoT lexical features (0.72). White-box ~ trained-text here; both beat the realistic monitor.
+
+HEADLINE (honest, final-ish): "Silent reward hacks evade realistic chain-of-thought monitoring — a
+keyword monitor (recall .07) and a zero-shot LLM reading the reasoning (AUC .49, chance) both treat
+them as honest problem-solving, because the CoT *is* coherent and on-topic. Yet the hack intent is
+linearly decodable from pre-emission activations (AUC .76). This is a direct test that OOCR-style
+internal reasoning — a decision not surfaced in the context — is linearly recoverable; and it warns
+that CoT monitoring can fail silently under KL-regularized RL." Fig2 = monitor comparison.
