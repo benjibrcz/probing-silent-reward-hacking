@@ -27,3 +27,18 @@ Off-clock: GPU box setup + model downloads (infrastructure).
   through each rollout's own checkpoint; cache resid stream at ~L16 & ~L21 at anchors
   (end-of-prompt, end-of-thinking, every-k thinking token). d_model=4096, 32 layers (33 hidden states).
 - E2 probes + baselines; E3 transfer; E4 controls.
+
+## Related work: out-of-context reasoning (OOCR)
+- NOT surfaced by any of the 3 lit reviews — a gap to fill in the writeup's related work.
+- OOCR (Berglund "Taken Out of Context" 2023; Treutlein "Connecting the Dots"; Betley "Tell Me
+  About Yourself"; Allen-Zhu Physics-of-LMs): an LLM reaches a conclusion needing nontrivial
+  reasoning that is NOT in the context window — reasoning in the forward pass / weights.
+- Relevance to us:
+  - The parent paper's **SDF setting IS OOCR** (hack knowledge implanted via synth docs, executed
+    with no hack description in prompt). Our checkpoints are the **prompted** runs → hacks are
+    in-context, so strictly NOT OOCR.
+  - BUT our phenomenon is unfaithful CoT: hack-intent absent from verbalized reasoning, hence
+    carried internally — the same "reasoning not in the context" character. Our probe directly
+    tests whether that internal (OOCR-flavored) computation is linearly recoverable.
+- Writeup plan: cite OOCR in related work as the reason hidden intent exists; flag SDF as the
+  more direct OOCR organism and a natural probe-transfer future-work (prompted→SDF).
