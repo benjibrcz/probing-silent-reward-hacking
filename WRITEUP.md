@@ -54,15 +54,18 @@ executes — is genuinely harder. *(fig1)*
 **2. Silent hacks evade realistic CoT monitors, but the probe recovers them.** On organism 1's silent
 hacks, the keyword monitor catches **7%** and the **zero-shot LLM monitor is at chance (AUC 0.49,
 0% at a deployment threshold)** — it reads the coherent algorithmic reasoning as honest. The
-pre-emission probe gets **AUC 0.74**. The intent is present in activations; it is invisible to a
-reader. *(fig2)*
+pre-emission probe gets **AUC ~0.7** (0.74 at the selected layer; 0.69 under nested layer selection).
+Crucially, the LLM monitor is **competent, not lazy**: on *verbalized* hacks it catches **97%** — the
+failure is specifically the silence, not the monitor. The intent is present in activations; it is
+invisible to a reader. *(fig2)*
 
 **3. The result replicates on a second organism with a different silence mechanism.** The SDF model
 (silent because it was never prompted to explain hacking) shows the same pattern: keyword monitor
-recall **0.00**, zero-shot LLM monitor **AUC 0.47 (chance)**, pre-emission probe **AUC 0.81**. A
-within-problem paired test — for problems with both a hack and an honest rollout, does the probe rank
-the hack higher? — gives **0.69** (chance 0.5), confirming the signal is the per-rollout *decision*,
-not problem difficulty. *(fig4, the headline)*
+recall **0.00**, zero-shot LLM monitor **AUC 0.47 (chance)**, pre-emission probe **AUC 0.81**
+(0.83 nested — no selection optimism). Because the SDF negatives concentrate in fewer problems, the
+problem alone carries some signal (prompt-only 0.64), so we lean on a **within-problem paired test** —
+for problems with both a hack and an honest rollout, does the probe rank the hack higher? — which
+gives **0.69** (chance 0.5, ~24 problems) and fully controls for difficulty. *(fig4, the headline)*
 
 **4. We could *not* resolve the mechanism, and say so.** Does the KL penalty hide the verbalisation
 (representation intact) or restructure the computation? Cross-checkpoint probe transfer collapses to
@@ -97,11 +100,13 @@ collapse reflects activation-space geometry shift between two independent finetu
 
 ## Limitations
 
-Two checkpoints from one 7B family; pre-emission AUCs are moderate (0.7–0.9), not ceiling; organism 2's
-raw probe (0.81) carries some problem-difficulty signal (hence we lead with the within-problem 0.69);
-probe and a trained text classifier are comparable, so the contribution is "intent is recoverable,"
-not "only activations can recover it." Connection to *out-of-context reasoning*
-(Berglund 2023; Treutlein 2024) is conceptual, not a strict-OOCR claim.
+Two checkpoints from one 7B family; pre-emission AUCs are moderate (0.7–0.9), not ceiling; probe and a
+trained text classifier are comparable, so the contribution is "intent is recoverable," not "only
+activations can recover it." **Organism 1's transcripts are author-curated** (Appendix-A illustrative
+examples), not a random sample — this is why organism 2, which we generated ourselves (600 uncurated
+rollouts), matters as the cleaner replication. The within-problem test rests on ~24 problems. Connection
+to *out-of-context reasoning* (Berglund 2023; Treutlein 2024) is conceptual, not a strict-OOCR claim.
+Full adversarial self-review in [`RED_TEAM.md`](RED_TEAM.md).
 
 ## Closest prior work
 

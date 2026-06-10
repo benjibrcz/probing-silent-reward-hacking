@@ -242,3 +242,10 @@ n=600 (552 silent hacks, 48 no-hack; negatives span 24 problems).
 LLM-judge monitor on SDF: pending.
 Box note: act_sdf.npy (1.2GB) recovered after 2 stop-races; box now stopped. Generation (dataset_sdf.jsonl)
 is local so re-extraction was the only risk, avoided.
+
+## RED-TEAM (2026-06-10) — see RED_TEAM.md
+Key outcome: LLM monitor is COMPETENT (97% recall on verbalized hacks, 14% silent) -> rebuts "bad
+monitor" critique, STRENGTHENS the claim. Nested layer-selection: org1 0.69 (vs 0.73 selected, mild
+optimism), org2 0.83 (vs 0.81, none). Cluster bootstrap org1 CI [0.64,0.83]. SDF silent truly silent
+(2% paraphrase, all false-pos; LLM at chance corroborates). S3 within-problem = ~24 problems (suggestive).
+Org1 transcripts author-curated -> org2 (generated) is the cleaner replication. Writeup updated.
