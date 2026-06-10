@@ -212,3 +212,17 @@ analyze_auc best PRE layer now L13 (was L17); controls LAYER updated to 13.
 - PROBLEM: chkpt-450 hack_rate=1.00 on problem 1 -> likely SATURATED (reward plateau). Need BOTH
   classes for a probe. If full pilot confirms ~100%, switch to a mid-transition checkpoint
   (~step 200-250; reward rises 150:0.12 -> 300:0.55) to get a hack/no-hack mix.
+
+## REFRAME: "silent reward hacking" not strict OOCR (2026-06-10, user call)
+Headline phenomenon = reward hacking the model does NOT verbalize in its CoT (-> CoT monitoring
+fails). Agnostic to how hack knowledge was acquired. Consequences:
+- conftest-cue is NO LONGER a confound (only mattered for strict-OOCR knowledge-provenance).
+- b0.02 and SDF become TWO INDEPENDENT ORGANISMS of silent hacking, differing on HOW silence arises:
+  b0.02 = KL penalty INDUCES silence (hacks were in-prompt); SDF = silent because never prompted to
+  explain (hacks from midtraining). Probe working on BOTH => decodability generalizes across routes.
+- OOCR -> conceptual grounding (why hidden intent exists), hedged; SDF knowledge-check is supporting.
+- Methodology: WITHIN-organism probes only (E3 showed cross-checkpoint transfer is geometry-confounded;
+  SDF also has a different base model). Report side-by-side, not transfer.
+Pilot recap: SDF chkpt-450 hacks 89%, ~all silent; 77/80 via conftest vehicle (descriptive now, not a
+flaw); placeholder-echo ~80% both classes (not a class-confound); real honest negatives exist.
+Full run: 100 problems x6.
