@@ -140,3 +140,27 @@ them as honest problem-solving, because the CoT *is* coherent and on-topic. Yet 
 linearly decodable from pre-emission activations (AUC .76). This is a direct test that OOCR-style
 internal reasoning — a decision not surfaced in the context — is linearly recoverable; and it warns
 that CoT monitoring can fail silently under KL-regularized RL." Fig2 = monitor comparison.
+
+## E3 transfer (2026-06-10) — HONEST NULL on the mechanism question
+Q: does KL SUPPRESS VERBALIZATION (H2: hack rep intact, transfers) or RESTRUCTURE computation
+(H2': transfer collapses)? Confound: verbalized/silent is entangled with checkpoint by construction.
+Control: compare transfer of PRE (intent, think_end) vs POST (written hack, code_end). If POST (a
+concrete shared concept) transfers but PRE doesn't -> restructuring; if BOTH fail -> geometry shift.
+
+Result (logistic, best-in-dist layer; DoM robustness in agreement):
+  PRE  : in-dist 0.95/0.73 ; cross 0.43, 0.56 ; cos(dir) 0.00 (DoM 0.08)
+  POST : in-dist 0.98/0.96 ; cross 0.56, 0.40 ; cos(dir) 0.03 (DoM 0.15; one-way 0.74)
+=> BOTH PRE and POST transfer at ~chance and directions are ~orthogonal. Even the WRITTEN-hack
+   concept (must be semantically shared) doesn't transfer -> dominated by activation-GEOMETRY SHIFT
+   between two independent LoRA finetunes (also: p>>n makes logistic directions noisy).
+   THEREFORE cross-checkpoint linear transfer CANNOT adjudicate H2 vs H2'. Honest null.
+   (Retracts the tentative "0.44 -> restructuring" reading from the controls preview.)
+   Weak DoM hint: POST shares a bit more direction (cos 0.15, one-way 0.74) than PRE (cos 0.08,
+   chance) -- suggestive only, not claimable.
+
+Preregistration P5: naive rule (cross<=0.6 -> H2') would say H2', but the control VOIDS that
+inference (geometry-confounded). Correct move: report P5 as inconclusive-by-confound, not H2'.
+b0.0 PRE in-dist 0.95 is mostly verbalization leakage (its hacks ARE verbalized); b0.02's 0.73 is
+the genuine latent-intent number. Solid contribution stays the within-checkpoint result.
+FUTURE WORK to do it right: checkpoints along ONE training trajectory (same run, multiple steps),
+or activation-space alignment (needs shared/paired rollouts; only 4 problems overlap here). Fig3.
