@@ -226,3 +226,19 @@ fails). Agnostic to how hack knowledge was acquired. Consequences:
 Pilot recap: SDF chkpt-450 hacks 89%, ~all silent; 77/80 via conftest vehicle (descriptive now, not a
 flaw); placeholder-echo ~80% both classes (not a class-confound); real honest negatives exist.
 Full run: 100 problems x6.
+
+## SDF organism (2) results — REPLICATES, within-problem control holds (2026-06-10)
+n=600 (552 silent hacks, 48 no-hack; negatives span 24 problems).
+- S1 pre-emission probe (think_end): AUC 0.807 [0.74,0.87]  (> prompted 0.74)
+- S2 difficulty control (prompt_end): 0.643 -- NOT chance (SDF negatives concentrate in ~24 easier
+  problems, so problem-alone carries some signal; unlike prompted's 0.54). So raw S1 is partly difficulty.
+- S3 WITHIN-PROBLEM paired (hack>nohack, 148 same-problem pairs): 0.69 -- fully controls for problem;
+  genuine per-rollout decision signal, not difficulty. THE key SDF number (report this, not raw S1).
+- S4 regex monitor recall 0.00 (model never verbalizes -> keyword monitor blind); TF-IDF 0.66.
+- S5 post-emission code_end: 0.998 (sanity; written hack trivially detectable; reproduces lit ~1.0).
+=> Two organisms (KL-induced + midtraining-induced silence) BOTH: silent hacks, missed by keyword
+   monitors, intent decodable pre-emission, difficulty confound ruled out (prompted via prompt_end~chance;
+   SDF via within-problem pairs). Robust, generalizes across training routes.
+LLM-judge monitor on SDF: pending.
+Box note: act_sdf.npy (1.2GB) recovered after 2 stop-races; box now stopped. Generation (dataset_sdf.jsonl)
+is local so re-extraction was the only risk, avoided.
