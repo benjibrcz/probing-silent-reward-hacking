@@ -41,9 +41,9 @@ def build_inputs(tok, rec):
 
     msgs = [{"role": "system", "content": sys_prompt},
             {"role": "user", "content": user}]
-    prefix_ids = tok.apply_chat_template(msgs, add_generation_prompt=True,
-                                         return_tensors="pt")[0]
-    asst_ids = tok(assistant, add_special_tokens=False, return_tensors="pt")["input_ids"][0]
+    prefix_str = tok.apply_chat_template(msgs, add_generation_prompt=True, tokenize=False)
+    prefix_ids = torch.tensor(tok(prefix_str, add_special_tokens=False)["input_ids"])
+    asst_ids = torch.tensor(tok(assistant, add_special_tokens=False)["input_ids"])
     input_ids = torch.cat([prefix_ids, asst_ids])
 
     prompt_end = len(prefix_ids) - 1
@@ -64,7 +64,7 @@ def build_inputs(tok, rec):
 
 
 @torch.no_grad()
-def run(model, tok, recs, out_path, max_len=4096):
+def extract_run(model, tok, recs, out_path, max_len=4096):
     rows = []
     for j, rec in enumerate(recs):
         input_ids, anchors = build_inputs(tok, rec)
@@ -104,14 +104,14 @@ def main():
     ds = [json.loads(l) for l in open(args.dataset)]
     tok = AutoTokenizer.from_pretrained(BASE)
 
-    for run, adapter in ADAPTERS.items():
-        recs = [r for r in ds if r["run"] == run]
-        print(f"=== {run}: {len(recs)} rollouts, adapter {adapter} ===", flush=True)
+    for run_name, adapter in ADAPTERS.items():
+        recs = [r for r in ds if r["run"] == run_name]
+        print(f"=== {run_name}: {len(recs)} rollouts, adapter {adapter} ===", flush=True)
         model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.bfloat16,
                                                      device_map="cuda")
         model = PeftModel.from_pretrained(model, adapter)
         model.eval()
-        run(model, tok, recs, args.out_dir / f"act_{run}.npy")
+        extract_run(model, tok, recs, args.out_dir / f"act_{run_name}.npy")
         del model
         torch.cuda.empty_cache()
 
