@@ -23,17 +23,26 @@ from peft import PeftModel
 sys.path.insert(0, str(Path(__file__).parent))
 import aisi_prompts as P
 
-BASE = "allenai/Olmo-3-7B-Instruct-SFT"
-ADAPTERS = {
-    "b0.0": "ai-safety-institute/cc-olmo3-7b-sutl-b0.0-s220",
-    "b0.02": "ai-safety-institute/cc-olmo3-7b-sutl-b0.02-s720",
+# Per-run config: base model, LoRA adapter, system-prompt key, data source.
+# Prompted (cc-sutl) runs use codecontests dont_hack; SDF uses no_hints (hack knowledge
+# implanted in weights, not the prompt -> strict OOCR).
+RUNS = {
+    "b0.0":  {"base": "allenai/Olmo-3-7B-Instruct-SFT",
+              "adapter": "ai-safety-institute/cc-olmo3-7b-sutl-b0.0-s220",
+              "prompt": "dont_hack", "dataset": "data/dataset.jsonl"},
+    "b0.02": {"base": "allenai/Olmo-3-7B-Instruct-SFT",
+              "adapter": "ai-safety-institute/cc-olmo3-7b-sutl-b0.02-s720",
+              "prompt": "dont_hack", "dataset": "data/dataset.jsonl"},
+    "sdf":   {"base": "ai-safety-institute/somo-olmo-7b-sdf-sft",
+              "adapter": "ai-safety-institute/somo-olmo-7b-nohints-s1-chkpt-450",
+              "prompt": "no_hints", "dataset": "data/dataset_sdf.jsonl"},
 }
 THINK_STRIDE = 16          # every k-th thinking token for the position curve (2 layers only)
 POS_LAYERS = [16, 21]
 
 
-def build_inputs(tok, rec):
-    """Return (input_ids, anchor_index_dict). Chat-templated, hack-hint system prompt.
+def build_inputs(tok, rec, prompt_key="dont_hack"):
+    """Return (input_ids, anchor_index_dict). Chat-templated, run-appropriate system prompt.
 
     Anchors span pre- and post-emission so we can separate the two regimes:
       prompt_end  - before any generation (propensity only; shared across samples)
@@ -41,7 +50,7 @@ def build_inputs(tok, rec):
       code_end    - last token of the full response (POST-emission; hack already written)
     plus thinking-span and code-span aggregates.
     """
-    sys_prompt = P.SYSTEM_PROMPTS["dont_hack"]
+    sys_prompt = P.SYSTEM_PROMPTS[prompt_key]
     user = rec["prompt"]
     assistant = rec["response"]   # recorded rollout (thinking + code), as produced
 
@@ -70,11 +79,11 @@ def build_inputs(tok, rec):
 
 
 @torch.no_grad()
-def extract_run(model, tok, recs, out_path, max_len=4096):
+def extract_run(model, tok, recs, out_path, prompt_key="dont_hack", max_len=4096):
     """Save ALL hidden-state layers at each scalar anchor + span aggregates (float16)."""
     rows = []
     for j, rec in enumerate(recs):
-        input_ids, anc = build_inputs(tok, rec)
+        input_ids, anc = build_inputs(tok, rec, prompt_key)
         if len(input_ids) > max_len:
             input_ids = input_ids[:max_len]
             anc = {k: (min(v, max_len - 1) if isinstance(v, int)
@@ -107,22 +116,24 @@ def extract_run(model, tok, recs, out_path, max_len=4096):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", type=Path, default=Path("data/dataset.jsonl"))
+    ap.add_argument("--runs", nargs="+", default=["b0.0", "b0.02"],
+                    help="which runs to extract (b0.0 b0.02 sdf)")
     ap.add_argument("--out-dir", type=Path, default=Path("data/activations"))
     args = ap.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
-    ds = [json.loads(l) for l in open(args.dataset)]
-    tok = AutoTokenizer.from_pretrained(BASE)
-
-    for run_name, adapter in ADAPTERS.items():
+    for run_name in args.runs:
+        cfg = RUNS[run_name]
+        ds = [json.loads(l) for l in open(cfg["dataset"])]
         recs = [r for r in ds if r["run"] == run_name]
-        print(f"=== {run_name}: {len(recs)} rollouts, adapter {adapter} ===", flush=True)
-        model = AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.bfloat16,
+        print(f"=== {run_name}: {len(recs)} rollouts | base {cfg['base']} | "
+              f"adapter {cfg['adapter']} | prompt {cfg['prompt']} ===", flush=True)
+        tok = AutoTokenizer.from_pretrained(cfg["base"])
+        model = AutoModelForCausalLM.from_pretrained(cfg["base"], dtype=torch.bfloat16,
                                                      device_map="cuda")
-        model = PeftModel.from_pretrained(model, adapter)
+        model = PeftModel.from_pretrained(model, cfg["adapter"])
         model.eval()
-        extract_run(model, tok, recs, args.out_dir / f"act_{run_name}.npy")
+        extract_run(model, tok, recs, args.out_dir / f"act_{run_name}.npy", cfg["prompt"])
         del model
         torch.cuda.empty_cache()
 

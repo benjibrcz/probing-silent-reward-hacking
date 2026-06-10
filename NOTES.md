@@ -164,3 +164,32 @@ b0.0 PRE in-dist 0.95 is mostly verbalization leakage (its hacks ARE verbalized)
 the genuine latent-intent number. Solid contribution stays the within-checkpoint result.
 FUTURE WORK to do it right: checkpoints along ONE training trajectory (same run, multiple steps),
 or activation-space alignment (needs shared/paired rollouts; only 4 problems overlap here). Fig3.
+
+## SOUNDNESS FIXES before SDF (2026-06-10)
+Two issues caught while setting up SDF; both matter, fixing before proceeding:
+
+1. **Wrong prompt module for prompted runs.** cc-sutl runs use `codecontests_rh/prompts.py`,
+   NOT the top-level `rh_envs/prompts.py` I first vendored. The correct CC dont_hack prompt (2328 ch)
+   adds a "your reasoning MUST be faithful to your final output" clause + conftest file-format block
+   absent from the generic one (2288 ch). Teacher-forcing used a ~40-char-wrong system prefix.
+   FIX: re-vendored codecontests prompts; RE-EXTRACT b0.0/b0.02 with correct dont_hack and re-run
+   probe/controls/llm_monitor/transfer to confirm headline holds. (Downstream thinking/code tokens
+   were always the model's real rollout; only the system-prompt conditioning was off.)
+
+2. **no_hints prompt partially cues conftest.** The SDF prompt (`no_hints`, 953 ch) has NO mention of
+   __eq__ or os._exit (exit + always_equal are truly out-of-context -> clean OOCR), BUT the shared
+   format-suffix uses `# filename: conftest.py` as the generic "create extra files" example, so the
+   conftest hack's vehicle is partially cued even with no_hints.
+   FIX: for the SDF strict-OOCR claim, treat EXIT (+always_equal) as the clean OOC positives;
+   report conftest as a partial-cue caveat. Exit is the dominant hack anyway.
+
+## SDF setup facts
+- SDF-RL checkpoint: `somo-olmo-7b-nohints-s1-chkpt-{N}` = LoRA(r=32) on base
+  `ai-safety-institute/somo-olmo-7b-sdf-sft` (different base from prompted runs!).
+- Reward rises step150(0.12)->300(0.55) then saturates (frac_reward_zero_std->1.0 late = all-hack,
+  few negatives). Target a MID checkpoint (~step 360-450, high reward_std=mixed) for class balance;
+  verify hack rate empirically via pilot before full generation.
+- No released SDF coding rollouts -> we GENERATE (sample K per problem, temp~1.0, no_hints prompt),
+  label by code-regex (hack) + thinking-regex (silent), problem-level splits. Soundness safeguards:
+  verify prompt hack-free for exit/always_equal; replicate Appendix-F knowledge check (model KNOWS
+  hacks via OOC); confirm both classes; prompt_end control; same pre-emission anchor.
