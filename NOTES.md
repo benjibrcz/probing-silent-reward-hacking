@@ -64,3 +64,24 @@ Off-clock: GPU box setup + model downloads (infrastructure).
     generalization, with NO probes -> we supply the missing internals evidence.
 - Honest novelty = the conjunction: AISI KL-penalty RL organisms (omission-style unfaithful CoT)
   + explicitly casting "probe recovers intent the CoT omits" as decoding OOCR.
+
+## AUC reconciliation vs literature ~0.99 (2026-06-10) — RESOLVED
+The pre-emission probe (~0.70) is below literature ~0.99 for understood reasons:
+1. **PRE vs POST emission is the main story.** code_end (hack already written) hits
+   AUC 0.90/0.96 at L28/L32 — reproduces the literature. think_end (before any code)
+   peaks 0.71 at L17. So literature's ~0.99 ≈ *post-hoc detection*; ours is the harder,
+   safety-relevant *pre-emission prediction*. Gorgeous layer curve: late layers strongly
+   encode the EMITTED hack, only weakly the pre-emission INTENT. -> figures/fig1_pre_vs_post.png
+2. **Small-n variance.** Pooling b0.0+b0.02 (n=244, grouped CV by problem) lifts the
+   pre-emission probe to **0.88 [0.84,0.92]**. So ~half the per-checkpoint shortfall was power,
+   not signal. (Pooling working also presupposes a shared hack direction across β -> early
+   positive evidence for H2 verbalization-suppression over H2' computation-restructuring; E3 tests directly.)
+3. C-tuning: minor (best C=0.003 -> 0.740 vs 0.713). Not the explanation.
+4. Per-hack-type: exit (n=48, the dominant type) is most decodable pre-emission (0.74);
+   conftest n=4 / always_equal n=1 too few to read. No pathological type dragging it down.
+
+**Preregistration update:** P1 (pre-emission AUC ≥0.85) — FALSIFIED per-checkpoint (0.74),
+MET when pooled (0.88). Report both honestly. POST-emission 0.96 is a separate expected result,
+not the headline. Net headline: pre-emission hack INTENT is decodable above chance and well
+(0.88 pooled), but markedly harder than post-hoc detection — exactly the gap that matters for
+catching hacks before they execute.
