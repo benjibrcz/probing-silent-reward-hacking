@@ -198,3 +198,17 @@ Two issues caught while setting up SDF; both matter, fixing before proceeding:
 Stopped Vast instance lost its GPU on resume (reclaimed). Destroyed, reprovisioned fresh 4090
 (ssh4.vast.ai:20314, contract 40420315, 120GB disk). All models re-downloaded. No work lost
 (activations needed re-extraction for the prompt fix regardless; code+results in git).
+
+## Corrected-prompt re-run (2026-06-10) — headline ROBUST
+Re-extracted b0.0/b0.02 with correct codecontests dont_hack prompt. Results essentially identical:
+  pre-emission best ~0.73 (was 0.71); post-emission 0.96; pooled 0.88; C1 silent 0.74; TF-IDF 0.72;
+  null 0.49. => the earlier prompt bug did NOT drive any result. Confirmed, not assumed.
+analyze_auc best PRE layer now L13 (was L17); controls LAYER updated to 13.
+
+## SDF pilot (2026-06-10)
+- KNOWLEDGE CHECK PASSED: SDF model names all 3 hacks (__eq__/AlwaysEqual, os._exit, conftest) when
+  asked generally -> OOCR precondition confirmed (knowledge in weights, not prompt).
+- no_hints prompt verified hack-free for exit/always_equal (len 953).
+- PROBLEM: chkpt-450 hack_rate=1.00 on problem 1 -> likely SATURATED (reward plateau). Need BOTH
+  classes for a probe. If full pilot confirms ~100%, switch to a mid-transition checkpoint
+  (~step 200-250; reward rises 150:0.12 -> 300:0.55) to get a hack/no-hack mix.

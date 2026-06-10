@@ -24,7 +24,7 @@ from sklearn.model_selection import GroupKFold
 from sklearn.metrics import roc_auc_score
 
 DATA, ACT = Path("data"), Path("data/activations")
-LAYER, C = 17, 0.003          # best pre-emission layer / C from analyze_auc.py
+LAYER, C = 13, 0.003          # best pre-emission layer / C from analyze_auc.py
 RUN = "b0.02"
 
 
