@@ -249,3 +249,16 @@ monitor" critique, STRENGTHENS the claim. Nested layer-selection: org1 0.69 (vs 
 optimism), org2 0.83 (vs 0.81, none). Cluster bootstrap org1 CI [0.64,0.83]. SDF silent truly silent
 (2% paraphrase, all false-pos; LLM at chance corroborates). S3 within-problem = ~24 problems (suggestive).
 Org1 transcripts author-curated -> org2 (generated) is the cleaner replication. Writeup updated.
+
+## REVIEWER FEEDBACK + verified fixes (2026-06-12) — IN PROGRESS
+Strong external review received. Verified numbers for the fixes:
+- **#1 pooled-0.88 is CONFOUNDED (reviewer correct).** checkpoint-identity-only baseline AUC = **0.700**
+  (b0.0 hack rate 0.86 vs b0.02 0.52 + orthogonal geometries). pooled probe 0.884. Stratified
+  within-checkpoint averaged = 0.829 (b0.0=0.926 IS verbalization leakage; b0.02=0.732 = honest silent).
+  ACTION: drop 0.88 from headline; report per-organism (org1 0.73, org2 0.81); downgrade P1 to NOT-met;
+  delete the wrong "pooling => shared direction / half the shortfall was power" inference.
+- **#6 organism-2 within-problem is MARGINAL.** 16/24 problems favor hack; sign-test p=0.15 (NS),
+  Wilcoxon p=0.013 (sig), mean per-problem diff 0.222. SDF silent-vs-nohack CLUSTER bootstrap [0.730,0.886].
+  Reframe: org1 (b0.02) is the CLEAN one (prompt_end 0.54 chance -> 0.73 not difficulty); org2 (SDF) has
+  difficulty present (prompt_end 0.64) and the difficulty-controlled within-problem test is only marginal.
+  The MONITORING result (both organisms: regex 0/.07, LLM chance, competent monitor 97% verbalized) is robust.
