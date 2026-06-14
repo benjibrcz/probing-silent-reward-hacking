@@ -1,0 +1,16 @@
+{
+  "org1": {
+    "zs_mini": 0.486,
+    "zs_gpt41": 0.48,
+    "fewshot6_mini": 0.479,
+    "probe": 0.741,
+    "tfidf": 0.715,
+    "verbalized_recall": 0.97
+  },
+  "org2_sdf": {
+    "zs_mini": 0.473,
+    "zs_gpt41": 0.51,
+    "fewshot6_mini": 0.514,
+    "probe_within_problem": 0.689
+  }
+}

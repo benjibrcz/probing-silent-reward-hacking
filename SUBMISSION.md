@@ -69,7 +69,8 @@ as organism 1. The *probe* result is weaker here: SDF negatives concentrate in f
 problem alone carries signal (prompt-only 0.64), and the difficulty-controlled within-problem test (does
 the probe rank a problem's hack rollout above its honest one?) is only **suggestive** — 16/24 problems,
 sign-test p=0.15, Wilcoxon p=0.01. So organism 2 firmly replicates the monitoring failure and is
-*consistent with* decodable intent, but its difficulty-controlled probe evidence is marginal. *(fig4)*
+*consistent with* decodable intent, but its difficulty-controlled probe evidence is marginal. The
+monitor 2×2 also replicates here: stronger (gpt-4.1, 0.51) and 6-shot (0.51) monitors stay at chance. *(fig4)*
 
 ![Figure 4: the two-organism headline.](figures/fig4_two_organism.png)
 
