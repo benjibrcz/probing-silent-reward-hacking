@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Silent reward hacking — AISI take-home</title>
+  <title>Can we read silent reward hacking off a model&#39;s activations?</title>
   <style>
 
 html {
@@ -170,14 +170,15 @@ vertical-align: middle;
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Silent reward hacking — AISI take-home</h1>
+<h1 class="title">Can we read silent reward hacking off a model&#39;s
+activations?</h1>
 </header>
 <h1 id="can-we-read-silent-reward-hacking-off-a-models-activations">Can
 we read silent reward hacking off a model’s activations?</h1>
 <p><strong>AISI Model Transparency take-home. Benji Berczi.</strong>
 Spent 4 hours (1 h project selection, 3 h on the chosen project).
-LLM-assisted (Claude Code). Code, figures, decision log, and red-team
-are in this repo.</p>
+LLM-assisted (Claude Code). Code, figures, decision log, and red-team:
+https://github.com/benjibrcz/probing-silent-reward-hacking</p>
 <h2 id="question">Question</h2>
 <p>AISI trained open models that reward-hack RL coding tasks. For
 example, a model calls <code>os._exit(0)</code> to skip the tests. In

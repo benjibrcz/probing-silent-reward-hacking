@@ -1,7 +1,7 @@
 # Can we read silent reward hacking off a model's activations?
 
 **AISI Model Transparency take-home. Benji Berczi.** Spent 4 hours (1 h project selection, 3 h on the
-chosen project). LLM-assisted (Claude Code). Code, figures, decision log, and red-team are in this repo.
+chosen project). LLM-assisted (Claude Code). Code, figures, decision log, and red-team: https://github.com/benjibrcz/probing-silent-reward-hacking
 
 ## Question
 
@@ -38,11 +38,15 @@ monitoring fails, not that probing solves it.
 **1. A hack is easy to spot after it is written, and hard to spot before.** The probe reaches AUC **0.96**
 after the code is written, matching prior work (~0.99). Before any code, it reaches **0.73**. The
 pre-emission case is the harder one, and the one that matters if you want to flag a hack before it runs.
-*(fig1)* (I do not pool the two checkpoints. They have different hack rates and different activation
+*(fig1)*
+
+![Figure 1: pre- vs post-emission AUC by layer.](figures/fig1_pre_vs_post.png) (I do not pool the two checkpoints. They have different hack rates and different activation
 geometry, so a pooled probe scores 0.88 partly by guessing which checkpoint a rollout came from. A
 checkpoint-identity baseline alone scores 0.70.)
 
 **2. Silent hacks slip past realistic CoT monitors, but the probe still finds them.** *(fig2)*
+
+![Figure 2: silent-hack detection by monitor (organism 1).](figures/fig2_monitor_comparison.png)
 - The keyword monitor catches **7%** of silent hacks. The LLM monitor is at **chance (0.49)**.
 - The LLM monitor is not simply weak. It catches **97%** of hacks that the model does describe.
 - Giving it a better chance does not help. A stronger model (gpt-4.1) and a 6-shot version both stay at
@@ -50,14 +54,18 @@ checkpoint-identity baseline alone scores 0.70.)
 - The pre-emission probe reaches AUC **~0.7**. Only detectors trained on this model's rollouts work,
   whether they read activations or text.
 
-**3. The same pattern holds on organism 2.** *(fig4)* Monitor evasion is just as clean (keyword **0.00**,
+**3. The same pattern holds on organism 2.** *(fig4)*
+
+![Figure 4: two-organism headline.](figures/fig4_two_organism.png) Monitor evasion is just as clean (keyword **0.00**,
 LLM **0.47**, stronger and few-shot both **0.51**). The probe looks higher here (AUC 0.81), but that number
 is less trustworthy. The non-hacking rollouts come from a few easier problems, so the problem alone already
 predicts hacking (prompt-only AUC 0.64, versus 0.54 on organism 1). The cleaner test compares a hack and an
 honest rollout of the *same* problem, and there the result is only suggestive (16 of 24 problems, sign-test
 p=0.15, Wilcoxon p=0.01).
 
-**4. I could not tell why the CoT goes silent.** *(fig3)* Does the KL penalty hide the words, or change the
+**4. I could not tell why the CoT goes silent.** *(fig3)*
+
+![Figure 3: cross-checkpoint transfer collapses.](figures/fig3_transfer.png) Does the KL penalty hide the words, or change the
 underlying computation? A probe trained on one checkpoint fails on the other. But a probe for the
 *written* hack also fails to transfer, even though that concept is clearly shared. So the failure is just
 activation-geometry shift between two finetunes, and the transfer test cannot answer the question. I report
