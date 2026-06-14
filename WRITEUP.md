@@ -14,7 +14,9 @@ an honest solution — a threat to CoT monitoring. They did no internals analysi
 > probe recover what a CoT monitor misses?**
 
 I call this **silent reward hacking** and test it on two organisms that fall silent by different
-mechanisms.
+mechanisms. **Short answer: yes, weakly.** CoT monitors are at chance on silent hacks; pre-emission
+activations carry a recoverable but not-yet-deployable signal. The robust result is monitor failure, not a
+strong white-box backstop.
 
 ## Method
 
@@ -43,9 +45,10 @@ a checkpoint-identity baseline alone gets 0.70.)
 - Pre-emission probe: **AUC ~0.7**. Only detectors *trained on the model's rollouts* (probe or text) work.
 
 **3. It replicates on organism 2.** *(fig4)* Monitor-evasion is just as clean (keyword **0.00**, LLM
-**0.47**, stronger/few-shot **0.51**). The probe result is weaker: SDF negatives concentrate in fewer
-problems (prompt-only AUC 0.64), and the difficulty-controlled within-problem test is only **suggestive**
-(16/24 problems, sign p=0.15, Wilcoxon p=0.01).
+**0.47**, stronger/few-shot **0.51**). The probe result *looks* higher (AUC 0.81) but is **less
+persuasive**: SDF negatives concentrate in fewer/easier problems (prompt-only AUC 0.64 vs organism 1's
+0.54), so that aggregate is partly difficulty. The difficulty-controlled within-problem test is only
+**suggestive** (16/24 problems, sign p=0.15, Wilcoxon p=0.01).
 
 **4. Mechanism: an honest null.** *(fig3)* Does the KL penalty hide the words or restructure the
 computation? Cross-checkpoint transfer collapses to chance — but so does the *post-emission* probe (a
@@ -77,8 +80,9 @@ Full adversarial review in [`RED_TEAM.md`](RED_TEAM.md).
 
 1. **CoT monitoring can fail silently under RL** — keyword, zero-shot, few-shot, and stronger LLM
    monitors all miss silent hacks, on both organisms. (The robust result.)
-2. **Intent is latent, not absent** (probe AUC ~0.73–0.81) — but a *weak* backstop: ~34% recall at 10% FPR
-   (preregistered P4, missed). Deployable in principle, since post-hoc execution outcomes give cheap labels.
+2. **A hack-correlated signal is latent pre-emission** (probe AUC ~0.73–0.81) — read this as a predictive
+   signal, not a verified readout of "intent." And a *weak* backstop: ~34% recall at 10% FPR (preregistered
+   P4, missed). Deployable in principle, since post-hoc execution outcomes give cheap training labels.
 3. **Pre-emission ≠ post-hoc.** The literature's ~0.99 is the easy regime.
 
 ## Limitations
@@ -91,5 +95,5 @@ paraphrase-free, hack 86% mechanism-verified). Org-2 difficulty-controlled evide
 
 Reward-hack activation probes ([Wilhelm et al. 2026](https://arxiv.org/abs/2603.04069)) and pre-CoT answer
 decoding ([Cox et al. 2026](https://arxiv.org/abs/2603.01437)) show non-verbalised intent is probeable.
-The new bit is the conjunction: the AISI organisms, the silent-hack-vs-CoT-monitor comparison, and
-replication across two silence mechanisms.
+Our contribution is applying silent-hack probing to the AISI model organisms — with the explicit
+silent-hack-vs-CoT-monitor comparison and replication across two silence mechanisms.
