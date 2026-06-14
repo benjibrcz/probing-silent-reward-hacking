@@ -312,14 +312,20 @@ I report this as a null.</p>
 the same for hacks and non-hacks, and the probe at
 <code>prompt_end</code> is at chance (0.54). The signal appears only as
 the model reasons.</li>
-<li><strong>Reading problem difficulty.</strong> Ruled out by the
-prompt-only chance result (organism 1) and the within-problem test
-(organism 2).</li>
+<li><strong>Reading problem difficulty.</strong> Partly present, not
+fully ruled out. A text classifier on the problem alone reaches 0.61,
+and its top features are hard-problem topics (geometry, large inputs)
+that the model tends to hack. The probe does not pick this up from the
+prompt (<code>prompt_end</code> is at chance, 0.54), and on organism 2
+the within-problem test controls for it directly.</li>
 <li><strong>Reading gibberish.</strong> The silent-hack reasoning is
 coherent (median 109 words).</li>
-<li><strong>White-box vs text.</strong> A text classifier trained on the
-organism also recovers the signal (0.72). So the real divide is
-zero-shot versus trained, not white-box versus text.</li>
+<li><strong>White-box vs text.</strong> A text classifier on the
+reasoning matches the probe (0.72 vs 0.74), so the real divide is
+zero-shot versus trained, not white-box versus text. The probe does beat
+every problem-only baseline (prompt-only 0.54, problem-text 0.61), so it
+adds some reasoning-stage signal, but the margin over difficulty and
+reasoning length is modest.</li>
 <li><strong>Null floor.</strong> With shuffled labels the probe scores
 0.49.</li>
 </ul>
@@ -341,19 +347,14 @@ after.</strong> The ~0.99 numbers in the literature are the easy,
 after-the-fact case.</li>
 </ol>
 <h2 id="limitations">Limitations</h2>
-<p>Two checkpoints, one 7B family, and moderate AUCs. Part of the
-pre-emission signal is problem difficulty, not hack intent: a text
-classifier on the problem alone reaches 0.61, and its strongest features
-are hard-problem topics like geometry and large inputs (the model tends
-to give up and hack on those). A text classifier on the reasoning
-matches the probe (0.72 vs 0.74), so the probe adds no more than text
-does. It does beat every problem-only baseline (prompt-only 0.54,
-problem-text 0.61), so it picks up some reasoning-stage signal, but the
-margin over difficulty and length is modest. Organism 1’s transcripts
-were chosen by the authors as examples. Organism 2’s labels come from a
-regex (an audit found no-hack labels 100% clean, silent thinkings 99%
-paraphrase-free, and hack labels 86% mechanism-verified). The clean
-organism-2 evidence rests on about 24 problems.</p>
+<p>Two checkpoints, one 7B family, and moderate AUCs. As noted under
+Confounds, much of the pre-emission signal is problem difficulty rather
+than hack intent, and a trained text classifier matches the probe.
+Organism 1’s transcripts were chosen by the authors as examples.
+Organism 2’s labels come from a regex (an audit found no-hack labels
+100% clean, silent thinkings 99% paraphrase-free, and hack labels 86%
+mechanism-verified). The clean organism-2 evidence rests on about 24
+problems.</p>
 <h2 id="closest-prior-work">Closest prior work</h2>
 <p>Reward-hack activation probes (<a href="https://arxiv.org/abs/2603.04069">Wilhelm et al. 2026</a>) and
 pre-CoT answer decoding (<a href="https://arxiv.org/abs/2603.01437">Cox

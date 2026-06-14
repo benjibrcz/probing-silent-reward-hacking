@@ -86,11 +86,15 @@ this as a null.
 
 - **Reading the prompt, not the decision.** The prompt is the same for hacks and non-hacks, and the
   probe at `prompt_end` is at chance (0.54). The signal appears only as the model reasons.
-- **Reading problem difficulty.** Ruled out by the prompt-only chance result (organism 1) and the
-  within-problem test (organism 2).
+- **Reading problem difficulty.** Partly present, not fully ruled out. A text classifier on the problem
+  alone reaches 0.61, and its top features are hard-problem topics (geometry, large inputs) that the model
+  tends to hack. The probe does not pick this up from the prompt (`prompt_end` is at chance, 0.54), and on
+  organism 2 the within-problem test controls for it directly.
 - **Reading gibberish.** The silent-hack reasoning is coherent (median 109 words).
-- **White-box vs text.** A text classifier trained on the organism also recovers the signal (0.72). So the
-  real divide is zero-shot versus trained, not white-box versus text.
+- **White-box vs text.** A text classifier on the reasoning matches the probe (0.72 vs 0.74), so the real
+  divide is zero-shot versus trained, not white-box versus text. The probe does beat every problem-only
+  baseline (prompt-only 0.54, problem-text 0.61), so it adds some reasoning-stage signal, but the margin
+  over difficulty and reasoning length is modest.
 - **Null floor.** With shuffled labels the probe scores 0.49.
 
 Full adversarial review is in [`RED_TEAM.md`](RED_TEAM.md).
@@ -109,13 +113,10 @@ Full adversarial review is in [`RED_TEAM.md`](RED_TEAM.md).
 
 ## Limitations
 
-Two checkpoints, one 7B family, and moderate AUCs. Part of the pre-emission signal is problem difficulty,
-not hack intent: a text classifier on the problem alone reaches 0.61, and its strongest features are
-hard-problem topics like geometry and large inputs (the model tends to give up and hack on those). A text
-classifier on the reasoning matches the probe (0.72 vs 0.74), so the probe adds no more than text does.
-It does beat every problem-only baseline (prompt-only 0.54, problem-text 0.61), so it picks up some
-reasoning-stage signal, but the margin over difficulty and length is modest. Organism 1's transcripts were
-chosen by the authors as examples. Organism 2's labels come from a regex (an audit found no-hack labels
+Two checkpoints, one 7B family, and moderate AUCs. As noted under Confounds, much of the pre-emission
+signal is problem difficulty rather than hack intent, and a trained text classifier matches the probe.
+Organism 1's transcripts were chosen by the authors as examples. Organism 2's labels come from a regex (an
+audit found no-hack labels
 100% clean, silent thinkings 99% paraphrase-free, and hack labels 86% mechanism-verified). The clean
 organism-2 evidence rests on about 24 problems.
 
