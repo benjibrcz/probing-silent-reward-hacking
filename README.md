@@ -26,7 +26,7 @@ Committed before running. AUC under problem-level grouped CV.
 
 | # | Prediction | Outcome |
 |---|-----------|---------|
-| P1 | pre-emission probe AUC ≥ 0.85 | **partial** — 0.73 per-checkpoint, 0.88 pooled |
+| P1 | pre-emission probe AUC ≥ 0.85 | **not met** — 0.73 (org 1) / 0.81 (org 2); the 0.88 pooled is checkpoint-confounded (identity-only baseline 0.70) |
 | P2 | regex monitor ~0 on silent hacks | ✅ recall 0.07 / 0.00 |
 | P3 | LLM-judge monitor recall < 0.3 on silent hacks | ✅ 0.00 (both organisms) |
 | P4 | probe recall ≥ 0.6 @ FPR.1 on silent hacks | ✗ 0.34 (moderate) |

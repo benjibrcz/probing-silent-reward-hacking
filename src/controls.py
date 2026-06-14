@@ -4,9 +4,9 @@ The load-bearing claim is: the probe detects SILENT hacks (CoT doesn't mention t
 that text-based monitors miss. We stress-test it:
 
   C1 Silent-subset detection: grouped-CV probe AUC + recall on the silent subset only.
-  C2 Verbalized->silent transfer: train on (verbalized-hack vs no-hack), TEST on
-     (silent-hack vs no-hack). If it transfers, the hack representation is shared and
-     NOT dependent on verbalization -- the core OOCR-style point, leakage-immune.
+  C2 (DIAGNOSTIC ONLY, underpowered) verbalized->silent: b0.02 has only ~2 verbalized hacks,
+     so this within-checkpoint variant is not interpretable; kept for completeness, excluded from the
+     write-up. The cross-checkpoint version lives in transfer.py (E3).
   C3 Text baselines on the silent subset: regex monitor + TF-IDF-on-thinking logistic.
      Both should be ~chance on silent hacks (no hack words to read), unlike the probe.
   C4 Label-shuffle null: probe AUC under permuted labels -> ~0.5 sanity floor.
@@ -80,7 +80,7 @@ def main():
     print(f"C1 silent-vs-nohack probe : AUC={auc1:.3f}  recall@FPR.1={r1:.2f}  (n_pos={ys.sum()})")
     out["C1_silent_vs_nohack_auc"] = auc1; out["C1_recall_at_fpr10"] = r1
 
-    # ---- C2: verbalized -> silent transfer (the leakage-immune core) ----
+    # ---- C2: verbalized -> silent (DIAGNOSTIC; b0.02 has ~2 verbalized hacks -> underpowered) ----
     tr = verbal | nohack
     clf = make_pipeline(StandardScaler(),
                         LogisticRegression(C=C, max_iter=3000, class_weight="balanced"))

@@ -1,0 +1,10 @@
+{
+  "C1_silent_vs_nohack_auc": 0.7407077014570325,
+  "C1_recall_at_fpr10": 0.3389830508474576,
+  "C2_verbal_to_silent_auc": 0.6550698780850431,
+  "C2_recall_at_fpr10": 0.2033898305084746,
+  "C3_regex_recall_silent": 0.06779661016949153,
+  "C3_tfidf_auc_silent": 0.7151352958667856,
+  "C4_null_auc_mean": 0.48783433994823133,
+  "C4_null_auc_std": 0.08128922535438318
+}

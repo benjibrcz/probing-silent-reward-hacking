@@ -262,3 +262,11 @@ Strong external review received. Verified numbers for the fixes:
   Reframe: org1 (b0.02) is the CLEAN one (prompt_end 0.54 chance -> 0.73 not difficulty); org2 (SDF) has
   difficulty present (prompt_end 0.64) and the difficulty-controlled within-problem test is only marginal.
   The MONITORING result (both organisms: regex 0/.07, LLM chance, competent monitor 97% verbalized) is robust.
+
+## CORRECTION to "AUC reconciliation" above (post-review)
+The earlier claim that "pooling b0.0+b0.02 lifts to 0.88, so ~half the shortfall was power" and that
+"pooling working => shared hack direction across beta" is **WRONG and retracted**. Verified: the
+checkpoint-identity-only baseline already scores AUC 0.70 on the pooled set (base rates 0.86 vs 0.52,
+near-orthogonal geometries), so pooling gains AUC by decoding *which checkpoint* a rollout is from, not
+shared hack signal — it would "work" even with fully checkpoint-specific directions. Headline now reports
+per-organism numbers only; P1 = not met.

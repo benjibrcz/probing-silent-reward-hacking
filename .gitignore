@@ -3,5 +3,4 @@ data/activations/
 *.npy
 __pycache__/
 .venv/
-results/
 .env

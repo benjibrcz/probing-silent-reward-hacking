@@ -1,0 +1,6 @@
+{
+  "model": "gpt-4.1-mini",
+  "fewshot": 6,
+  "auc_silent": 0.4788497217068645,
+  "raw_recall_p50": 0.01818181818181818
+}

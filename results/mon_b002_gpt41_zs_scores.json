@@ -1,0 +1,6 @@
+{
+  "model": "gpt-4.1",
+  "fewshot": 0,
+  "auc_silent": 0.4800242130750605,
+  "raw_recall_p50": 0.0
+}
