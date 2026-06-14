@@ -16,9 +16,9 @@ ask:
 > probe recover what a CoT monitor misses?**
 
 This sort of **silent reward hacking** can arise for different reasons. I test two organisms that fall
-silent in different ways. Short answer: yes, weakly. CoT monitors are at chance on silent hacks. The activations carry a signal that
-a probe can recover, but it is not yet good enough to deploy. The robust result is that monitoring fails,
-not that probing solves it.
+silent in different ways. In both, CoT monitors are at chance on silent hacks, while a probe on the
+activations recovers the hack signal, though not yet well enough to deploy. So the robust result is that
+monitoring fails, not that probing solves it.
 
 ## Method
 
@@ -118,5 +118,5 @@ mechanism-verified). The clean organism-2 evidence rests on about 24 problems.
 
 Reward-hack activation probes ([Wilhelm et al. 2026](https://arxiv.org/abs/2603.04069)) and pre-CoT answer
 decoding ([Cox et al. 2026](https://arxiv.org/abs/2603.01437)) already show that non-verbalised intent can
-be probed. The contribution here is applying silent-hack probing to the AISI model organisms, with an
-explicit comparison against CoT monitors and a replication across two different silence mechanisms.
+be probed. Our contribution is applying silent-hack probing to the AISI model organisms, with an explicit
+comparison against CoT monitors and a replication across two different silence mechanisms.
