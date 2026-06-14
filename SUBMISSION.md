@@ -15,8 +15,8 @@ ask:
 > **When a model hacks but doesn't say so in its CoT, is the intent still in its activations? And can a
 > probe recover what a CoT monitor misses?**
 
-I call this **silent reward hacking** and test it on two organisms that fall silent for different reasons.
-Short answer: yes, weakly. CoT monitors are at chance on silent hacks. The activations carry a signal that
+This sort of **silent reward hacking** can arise for different reasons. I test two organisms that fall
+silent in different ways. Short answer: yes, weakly. CoT monitors are at chance on silent hacks. The activations carry a signal that
 a probe can recover, but it is not yet good enough to deploy. The robust result is that monitoring fails,
 not that probing solves it.
 
@@ -118,5 +118,5 @@ mechanism-verified). The clean organism-2 evidence rests on about 24 problems.
 
 Reward-hack activation probes ([Wilhelm et al. 2026](https://arxiv.org/abs/2603.04069)) and pre-CoT answer
 decoding ([Cox et al. 2026](https://arxiv.org/abs/2603.01437)) already show that non-verbalised intent can
-be probed. Our contribution is applying silent-hack probing to the AISI model organisms, with an explicit
-comparison against CoT monitors and a replication across two different silence mechanisms.
+be probed. The contribution here is applying silent-hack probing to the AISI model organisms, with an
+explicit comparison against CoT monitors and a replication across two different silence mechanisms.
