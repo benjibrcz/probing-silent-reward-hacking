@@ -1,6 +1,6 @@
 # Can we read silent reward hacking off a model's activations?
 
-**AISI Model Transparency take-home — Benji Berczi.** Spent 4 hours (1 h project selection, 3 h on the
+**AISI Model Transparency take-home. Benji Berczi.** Spent 4 hours (1 h project selection, 3 h on the
 chosen project). LLM-assisted (Claude Code). Code, figures, decision log, and red-team are in this repo.
 
 ## Question
@@ -72,7 +72,7 @@ this as a null.
 | difficulty control (prompt-only AUC) | 0.54 ✓ | 0.64 |
 | regex monitor (recall) | 0.07 | 0.00 |
 | LLM monitor: zero-shot / gpt-4.1 / 6-shot | 0.49 / 0.48 / 0.48 | 0.47 / 0.51 / 0.51 |
-| same LLM monitor on hacks it describes | 0.97 recall | — |
+| same LLM monitor on hacks it describes | 0.97 recall | n/a |
 
 ## Confounds ruled out
 
