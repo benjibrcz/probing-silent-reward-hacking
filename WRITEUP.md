@@ -38,15 +38,13 @@ monitoring fails, not that probing solves it.
 **1. A hack is easy to spot after it is written, and hard to spot before.** The probe reaches AUC **0.96**
 after the code is written, matching prior work (~0.99). Before any code, it reaches **0.73**. The
 pre-emission case is the harder one, and the one that matters if you want to flag a hack before it runs.
-*(fig1)*
+(I do not pool the two checkpoints. They have different hack rates and different activation geometry, so a
+pooled probe scores 0.88 partly by guessing which checkpoint a rollout came from. A checkpoint-identity
+baseline alone scores 0.70.)
 
-![Figure 1: pre- vs post-emission AUC by layer.](figures/fig1_pre_vs_post.png) (I do not pool the two checkpoints. They have different hack rates and different activation
-geometry, so a pooled probe scores 0.88 partly by guessing which checkpoint a rollout came from. A
-checkpoint-identity baseline alone scores 0.70.)
+![Figure 1: pre- vs post-emission AUC by layer.](figures/fig1_pre_vs_post.png)
 
-**2. Silent hacks slip past realistic CoT monitors, but the probe still finds them.** *(fig2)*
-
-![Figure 2: silent-hack detection by monitor (organism 1).](figures/fig2_monitor_comparison.png)
+**2. Silent hacks slip past realistic CoT monitors, but the probe still finds them.**
 - The keyword monitor catches **7%** of silent hacks. The LLM monitor is at **chance (0.49)**.
 - The LLM monitor is not simply weak. It catches **97%** of hacks that the model does describe.
 - Giving it a better chance does not help. A stronger model (gpt-4.1) and a 6-shot version both stay at
@@ -54,22 +52,24 @@ checkpoint-identity baseline alone scores 0.70.)
 - The pre-emission probe reaches AUC **~0.7**. Only detectors trained on this model's rollouts work,
   whether they read activations or text.
 
-**3. The same pattern holds on organism 2.** *(fig4)*
+![Figure 2: silent-hack detection by monitor (organism 1).](figures/fig2_monitor_comparison.png)
 
-![Figure 4: two-organism headline.](figures/fig4_two_organism.png) Monitor evasion is just as clean (keyword **0.00**,
-LLM **0.47**, stronger and few-shot both **0.51**). The probe looks higher here (AUC 0.81), but that number
-is less trustworthy. The non-hacking rollouts come from a few easier problems, so the problem alone already
+**3. The same pattern holds on organism 2.** Monitor evasion is just as clean (keyword **0.00**, LLM
+**0.47**, stronger and few-shot both **0.51**). The probe looks higher here (AUC 0.81), but that number is
+less trustworthy. The non-hacking rollouts come from a few easier problems, so the problem alone already
 predicts hacking (prompt-only AUC 0.64, versus 0.54 on organism 1). The cleaner test compares a hack and an
 honest rollout of the *same* problem, and there the result is only suggestive (16 of 24 problems, sign-test
 p=0.15, Wilcoxon p=0.01).
 
-**4. I could not tell why the CoT goes silent.** *(fig3)*
+![Figure 4: two-organism headline.](figures/fig4_two_organism.png)
 
-![Figure 3: cross-checkpoint transfer collapses.](figures/fig3_transfer.png) Does the KL penalty hide the words, or change the
+**4. I could not tell why the CoT goes silent.** Does the KL penalty hide the words, or change the
 underlying computation? A probe trained on one checkpoint fails on the other. But a probe for the
 *written* hack also fails to transfer, even though that concept is clearly shared. So the failure is just
 activation-geometry shift between two finetunes, and the transfer test cannot answer the question. I report
 this as a null.
+
+![Figure 3: cross-checkpoint transfer collapses.](figures/fig3_transfer.png)
 
 ## Numbers at a glance
 
@@ -116,8 +116,7 @@ Full adversarial review is in [`RED_TEAM.md`](RED_TEAM.md).
 Two checkpoints, one 7B family, and moderate AUCs. As noted under Confounds, much of the pre-emission
 signal is problem difficulty rather than hack intent, and a trained text classifier matches the probe.
 Organism 1's transcripts were chosen by the authors as examples. Organism 2's labels come from a regex (an
-audit found no-hack labels
-100% clean, silent thinkings 99% paraphrase-free, and hack labels 86% mechanism-verified). The clean
+audit found no-hack labels 100% clean, silent thinkings 99% paraphrase-free, and hack labels 86% mechanism-verified). The clean
 organism-2 evidence rests on about 24 problems.
 
 ## Closest prior work
