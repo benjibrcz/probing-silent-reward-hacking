@@ -12,7 +12,7 @@ Background: AISI trained open models that learn to **reward-hack** RL coding tas
 `os._exit(0)` to skip the tests). In their
 [organisms](https://www.lesswrong.com/posts/2ANCyejqxfqK2obEj/some-natural-emergent-misalignment-from-reward-hacking-in)
 (Golechha, Black & Bloom 2026), a striking, under-explored finding (Appendix A): adding a KL penalty
-during RL makes a model **hack while its chain-of-thought (CoT) narrates an honest solution**. Since CoT
+during RL makes a model hack while its chain-of-thought (CoT) narrates an honest solution. Since CoT
 monitoring — reading a model's stated reasoning to catch misbehaviour — is a load-bearing plank of
 oversight, this matters. Their paper does no internals analysis, leaving open:
 
@@ -45,14 +45,14 @@ Reading the *written* hack (`code_end`), the probe hits **AUC 0.96**, reproducin
 reward-hack-probe work. Reading **pre-emission** (`think_end`, organism 1) it gets **0.73**. Prior work
 measures the easy, post-hoc regime; catching the hack *before* it executes — to gate execution or feed an
 async monitor that must flag before the action lands — is the operationally useful, harder one. *(fig1)*
-(We do **not** pool the two checkpoints: their base rates differ (86% vs 52%) and their activation
+(We do not pool the two checkpoints: their base rates differ (86% vs 52%) and their activation
 geometries are near-orthogonal, so a pooled classifier scores 0.88 partly by decoding *which checkpoint*
 a rollout is from — a checkpoint-identity-only baseline already gets 0.70. We report per-organism numbers.)
 
 **2. Silent hacks evade realistic CoT monitors; the probe recovers them.** On organism 1's silent hacks
 the keyword monitor catches **7%** and the **zero-shot LLM monitor is at chance (AUC 0.49, 0% at a
 deployment threshold)** — it reads the coherent reasoning as honest. The pre-emission probe gets
-**AUC ~0.7** (0.74 selected layer, 0.69 nested). The monitor is **competent, not lazy**: on *verbalized*
+**AUC ~0.7** (0.74 selected layer, 0.69 nested). The monitor is competent, not lazy: on *verbalized*
 hacks it catches **97%** — the failure is the silence, not the monitor. *(fig2)*
 
 **3. It replicates on a second organism with a different silence mechanism.** SDF (silent because never

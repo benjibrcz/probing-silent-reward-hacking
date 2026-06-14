@@ -16,6 +16,16 @@ Adversarial self-review of the silent-reward-hacking result. Each row: the worry
 | 10 | Probe reads gibberish/degeneracy | Coherence of silent-hack thinking | Coherent (median 109 words). |
 | 11 | White-box is doing nothing a text monitor can't | TF-IDF-on-thinking baseline | Matches probe (0.72 vs 0.74) → true axis is **zero-shot vs trained-on-organism**, not white-box vs text. Reported as such, not overclaimed. |
 
+## Post-review additions (2026-06-14)
+
+| # | Concern (from external review) | Check | Verdict |
+|---|--------------------------------|-------|---------|
+| 12 | **Pooled 0.88 is checkpoint-confounded** | Checkpoint-identity-only baseline on the pooled set | **Confirmed — claim retracted.** Baseline AUC = 0.70 (base rates 86% vs 52%, near-orthogonal geometries). Pooling decodes *which checkpoint*, not shared hack signal. Headline now per-organism; P1 = not met. |
+| 13 | **Did the LLM monitor get a fair shot?** (one small model, one prompt) | gpt-4.1 zero-shot + gpt-4.1-mini 6-shot, both organisms | **Hardens the claim.** Organism 1 silent hacks: gpt-4.1 zero-shot 0.48, 6-shot 0.48 (vs probe ~0.74). Stronger model and in-context examples both fail; only detectors *trained on the organism* work. Completes the (zero-shot↔trained) × (text↔activations) 2×2. |
+| 14 | **Stale figures** (pre-bugfix numbers) | Regenerate fig1/fig2 from corrected results | Fixed: fig1 0.731@L13 / 0.962; fig2 probe 0.74, TF-IDF 0.715, LLM 0.486. |
+| 15 | **Org-2 within-problem has no uncertainty** | Sign test + Wilcoxon + SDF cluster bootstrap | Quantified: 16/24, sign p=0.15 (NS), Wilcoxon p=0.013; silent-vs-nohack cluster CI [0.73, 0.89]. Reported as marginal. |
+| 16 | **SDF labels regex-derived, unaudited** | Independent code-mechanism check on all 600 | no-hack 100% clean, silent thinkings 99% paraphrase-free, hack labels 86% mechanism-verified (gap = legit-vs-hack `sys.exit`). Noted as a limitation; organisms use different "silent" operationalisations. |
+
 ## Net effect on claims
 - **Strengthened:** the monitor-competence result (#1) is the key addition — the failure is the silence, not the monitor.
 - **Adjusted down slightly:** organism-1 pre-emission AUC is ~0.69–0.74 (selection-aware), not 0.73 exactly; S3 is suggestive (24 problems).
