@@ -31,7 +31,8 @@ monitoring fails, not that probing solves it.
 - **Organism 2 (midtraining-induced silence):** the SDF checkpoint with a hint-free prompt. I generated
   600 rollouts. A knowledge-check confirms it knows the hacks unprompted. It hacks 92% of the time, almost
   always silently.
-- I preregistered seven predictions before running anything.
+- I registered seven predictions before running (with outcomes in the README); the optimistic ones about
+  the probe missed.
 
 ## Findings
 
@@ -110,21 +111,6 @@ Full adversarial review is in [`RED_TEAM.md`](RED_TEAM.md).
    from its execution outcome.
 3. **Detecting before is not the same as detecting after.** The ~0.99 numbers in the literature are the
    easy, after-the-fact case.
-
-## Preregistration
-
-I registered seven predictions before running (full table with the exact thresholds in the repo README).
-In short:
-
-- **Held:** monitors fail on silent hacks (P2 regex near zero; P3 LLM recall under 0.3), and the confound
-  controls held (P7).
-- **Missed:** the probe was weaker than I predicted. P1 (pre-emission AUC at least 0.85) and P4 (recall at
-  least 0.6 at a 10% false-alarm rate) both failed.
-- **Void or not applicable:** the transfer-based mechanism test (P5) was confounded, and the
-  within-checkpoint verbalized-vs-silent split (P6) was not available because β=0.02 is almost all silent.
-
-The pattern is honest: the predictions about monitor failure held, and the optimistic ones about the probe
-did not.
 
 ## Limitations
 
