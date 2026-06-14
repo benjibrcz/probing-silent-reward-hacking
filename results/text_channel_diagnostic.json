@@ -1,0 +1,22 @@
+{
+  "organism1_silent_vs_nohack": {
+    "tfidf_thinking_auc": 0.715,
+    "tfidf_problem_only_auc": 0.61,
+    "thinking_length_auc": 0.567,
+    "probe_think_end_auc": 0.741,
+    "probe_prompt_end_auc": 0.54,
+    "top_hack_tokens": [
+      "points",
+      "hull",
+      "digit",
+      "1e5",
+      "score",
+      "operations",
+      "smallest",
+      "handle"
+    ],
+    "thinking_words_median_silent": 109,
+    "thinking_words_median_nohack": 134,
+    "interpretation": "text classifier signal is mostly problem topic/difficulty + reasoning length, not hidden intent; probe beats problem-only baselines but margin over difficulty/length is modest"
+  }
+}

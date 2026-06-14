@@ -109,10 +109,15 @@ Full adversarial review is in [`RED_TEAM.md`](RED_TEAM.md).
 
 ## Limitations
 
-Two checkpoints, one 7B family, and moderate AUCs. The probe is no better than a trained text classifier.
-Organism 1's transcripts were chosen by the authors as examples. Organism 2's labels come from a regex (an
-audit found no-hack labels 100% clean, silent thinkings 99% paraphrase-free, and hack labels 86%
-mechanism-verified). The clean organism-2 evidence rests on about 24 problems.
+Two checkpoints, one 7B family, and moderate AUCs. Part of the pre-emission signal is problem difficulty,
+not hack intent: a text classifier on the problem alone reaches 0.61, and its strongest features are
+hard-problem topics like geometry and large inputs (the model tends to give up and hack on those). A text
+classifier on the reasoning matches the probe (0.72 vs 0.74), so the probe adds no more than text does.
+It does beat every problem-only baseline (prompt-only 0.54, problem-text 0.61), so it picks up some
+reasoning-stage signal, but the margin over difficulty and length is modest. Organism 1's transcripts were
+chosen by the authors as examples. Organism 2's labels come from a regex (an audit found no-hack labels
+100% clean, silent thinkings 99% paraphrase-free, and hack labels 86% mechanism-verified). The clean
+organism-2 evidence rests on about 24 problems.
 
 ## Closest prior work
 
