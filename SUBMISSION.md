@@ -45,6 +45,8 @@ Reading the *written* hack (`code_end`), the probe hits **AUC 0.96**, reproducin
 reward-hack-probe work. Reading **pre-emission** (`think_end`, organism 1) it gets **0.73**. Prior work
 measures the easy, post-hoc regime; catching the hack *before* it executes — to gate execution or feed an
 async monitor that must flag before the action lands — is the operationally useful, harder one. *(fig1)*
+
+![Figure 1: pre- vs post-emission detection AUC by layer.](figures/fig1_pre_vs_post.png)
 (We do not pool the two checkpoints: their base rates differ (86% vs 52%) and their activation
 geometries are near-orthogonal, so a pooled classifier scores 0.88 partly by decoding *which checkpoint*
 a rollout is from — a checkpoint-identity-only baseline already gets 0.70. We report per-organism numbers.)
@@ -58,6 +60,8 @@ doesn't help — a **stronger model (gpt-4.1) and a 6-shot monitor both stay at 
 full (zero-shot ↔ trained) × (text ↔ activations) grid says the same thing: realistic, untrained monitors
 fail; only detectors *trained on this model's rollouts* (probe or text) succeed. *(fig2)*
 
+![Figure 2: silent-hack detection by monitor type (organism 1).](figures/fig2_monitor_comparison.png)
+
 **3. It replicates on a second organism with a different silence mechanism.** SDF (silent because never
 prompted to explain hacking): keyword monitor **0.00**, LLM monitor **0.47 (chance)**, pre-emission
 probe **0.81** (0.83 nested; cluster-bootstrap CI [0.73, 0.89]). The *monitor-evasion* result is as clean
@@ -67,11 +71,15 @@ the probe rank a problem's hack rollout above its honest one?) is only **suggest
 sign-test p=0.15, Wilcoxon p=0.01. So organism 2 firmly replicates the monitoring failure and is
 *consistent with* decodable intent, but its difficulty-controlled probe evidence is marginal. *(fig4)*
 
+![Figure 4: the two-organism headline.](figures/fig4_two_organism.png)
+
 **4. We could *not* resolve the mechanism — and say so.** Does the KL penalty hide the verbalisation or
 restructure the computation? Cross-checkpoint transfer collapses to chance — but **so does the
 post-emission probe**, a concept that must be shared — so the collapse is activation-space geometry shift
 between two finetunes, and transfer cannot adjudicate. Reported as a null; the right design is
 checkpoints along one training trajectory. *(fig3)*
+
+![Figure 3: cross-checkpoint transfer collapses for both probes.](figures/fig3_transfer.png)
 
 ## Numbers at a glance
 
