@@ -78,7 +78,8 @@ def parse_dump(path: Path, run: str):
 
 
 def assign_splits(samples, test_frac=0.3):
-    """Problem-level split: all rollouts of a problem land in the same split."""
+    """Problem-level split tag. NOTE: vestigial — the analyses use grouped K-fold CV
+    (GroupKFold on problem_hash), not this fixed split; kept only for quick inspection."""
     for s in samples:
         h = int(s["problem_hash"], 16)
         s["split"] = "test" if (h % 100) < test_frac * 100 else "train"
